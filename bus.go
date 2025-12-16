@@ -52,6 +52,33 @@ type AllBusStopResponse struct {
 	BusStops []BusStop `json:"value"`
 }
 
+type NextBus struct {
+	OriginCode       string `json:"OriginCode"`
+	DestinationCode  string `json:"DestinationCode"`
+	EstimatedArrival string `json:"EstimatedArrival"`
+	Monitored        int    `json:"Monitored"`
+	Latitude         string `json:"Latitude"`
+	Longitude        string `json:"Longitude"`
+	VisitNumber      string `json:"VisitNumber"`
+	Load             string `json:"Load"`
+	Feature          string `json:"Feature"`
+	Type             string `json:"Type"`
+}
+
+type BusArrivalService struct {
+	ServiceNo string  `json:"ServiceNo"`
+	Operator  string  `json:"Operator"`
+	NextBus   NextBus `json:"NextBus"`
+	NextBus2  NextBus `json:"NextBus2"`
+	NextBus3  NextBus `json:"NextBus3"`
+}
+
+type BusArrivalResponse struct {
+	Metadata    string              `json:"odata.metadata"`
+	BusStopCode string              `json:"BusStopCode"`
+	Services    []BusArrivalService `json:"Services"`
+}
+
 func GetAllBusServices(apiClient *APIClient) (AllBusServiceResponse, error) {
 	var result AllBusServiceResponse
 	if err := apiClient.getJSON("BusServices", &result); err != nil {
@@ -74,6 +101,26 @@ func GetAllBusStops(apiClient *APIClient) (AllBusStopResponse, error) {
 	var result AllBusStopResponse
 	if err := apiClient.getJSON("BusStops", &result); err != nil {
 		return AllBusStopResponse{}, err
+	}
+
+	return result, nil
+}
+
+func GetBusArrivalAtBusStop(apiClient *APIClient, busStopCode string) (BusArrivalResponse, error) {
+	var result BusArrivalResponse
+	endpoint := "v3/BusArrival?BusStopCode=" + busStopCode
+	if err := apiClient.getJSON(endpoint, &result); err != nil {
+		return BusArrivalResponse{}, err
+	}
+
+	return result, nil
+}
+
+func GetBusArrivalAtBusStopAndService(apiClient *APIClient, busStopCode, service string) (BusArrivalResponse, error) {
+	var result BusArrivalResponse
+	endpoint := "v3/BusArrival?BusStopCode=" + busStopCode + "&ServiceNo=" + service
+	if err := apiClient.getJSON(endpoint, &result); err != nil {
+		return BusArrivalResponse{}, err
 	}
 
 	return result, nil

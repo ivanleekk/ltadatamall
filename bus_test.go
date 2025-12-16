@@ -63,3 +63,29 @@ func TestGetAllBusStops(t *testing.T) {
 		t.Errorf("Expected non-empty BusStops in response")
 	}
 }
+
+func TestGetBusArrivalAtBusStop(t *testing.T) {
+	busStopCode := "77009"
+	response, err := GetBusArrivalAtBusStop(testClient, busStopCode)
+
+	if err != nil {
+		t.Fatalf("Error calling GetBusArrivalAtBusStop: %v", err)
+	}
+
+	if len(response.Services) == 0 {
+		t.Errorf("Expected non-empty Services in response for bus stop %s", busStopCode)
+	}
+}
+
+func TestGetBusArrivalAtBusStopAndService(t *testing.T) {
+	busStopCode := "77009"
+	service := "17"
+	response, err := GetBusArrivalAtBusStopAndService(testClient, busStopCode, service)
+
+	if err != nil {
+		t.Fatalf("Error calling GetBusArrivalAtBusStop: %v", err)
+	}
+	if len(response.Services) == 0 {
+		t.Errorf("Expected non-empty Services in response for bus stop %s and service %s", busStopCode, service)
+	}
+}
