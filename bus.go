@@ -1,11 +1,5 @@
 package ltadatamall
 
-import (
-	"encoding/json"
-	"errors"
-	"net/http"
-)
-
 type BusService struct {
 	ServiceNo       string `json:"ServiceNo"`
 	Operator        string `json:"Operator"`
@@ -58,66 +52,27 @@ type AllBusStopResponse struct {
 	BusStops []BusStop `json:"value"`
 }
 
-func GetAllBusServices(client *APIClient) (AllBusServiceResponse, error) {
-	req, err := http.NewRequest("GET", client.baseURL+"BusServices", nil)
-	if err != nil {
-		return AllBusServiceResponse{}, errors.New("error creating the request")
-	}
-	req.Header.Add("AccountKey", client.accountKey)
-
-	resp, err := client.httpClient.Do(req)
-	if err != nil {
-		return AllBusServiceResponse{}, err
-	}
-	defer resp.Body.Close()
-
+func GetAllBusServices(apiClient *APIClient) (AllBusServiceResponse, error) {
 	var result AllBusServiceResponse
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
+	if err := apiClient.getJSON("BusServices", &result); err != nil {
 		return AllBusServiceResponse{}, err
 	}
 
 	return result, nil
 }
 
-func GetAllBusRoutes(client *APIClient) (AllBusRouteResponse, error) {
-	req, err := http.NewRequest("GET", client.baseURL+"BusRoutes", nil)
-	if err != nil {
-		return AllBusRouteResponse{}, errors.New("error creating the request")
-	}
-	req.Header.Add("AccountKey", client.accountKey)
-
-	resp, err := client.httpClient.Do(req)
-	if err != nil {
-		return AllBusRouteResponse{}, err
-	}
-	defer resp.Body.Close()
-
+func GetAllBusRoutes(apiClient *APIClient) (AllBusRouteResponse, error) {
 	var result AllBusRouteResponse
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
+	if err := apiClient.getJSON("BusRoutes", &result); err != nil {
 		return AllBusRouteResponse{}, err
 	}
 
 	return result, nil
 }
 
-func GetAllBusStops(client *APIClient) (AllBusStopResponse, error) {
-	req, err := http.NewRequest("GET", client.baseURL+"BusStops", nil)
-	if err != nil {
-		return AllBusStopResponse{}, errors.New("error creating the request")
-	}
-	req.Header.Add("AccountKey", client.accountKey)
-
-	resp, err := client.httpClient.Do(req)
-	if err != nil {
-		return AllBusStopResponse{}, err
-	}
-	defer resp.Body.Close()
-
+func GetAllBusStops(apiClient *APIClient) (AllBusStopResponse, error) {
 	var result AllBusStopResponse
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
+	if err := apiClient.getJSON("BusStops", &result); err != nil {
 		return AllBusStopResponse{}, err
 	}
 
