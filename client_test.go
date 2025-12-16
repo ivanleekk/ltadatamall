@@ -17,4 +17,8 @@ func TestNewClient(t *testing.T) {
 	if client.accountKey != accountKey {
 		t.Errorf("Expected accountKey %s, got %s", accountKey, client.accountKey)
 	}
+
+	if client.httpClient == nil {
+		t.Error("Expected httpClient to be initialized, got nil")
+	}
 }
