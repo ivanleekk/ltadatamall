@@ -45,7 +45,20 @@ type AllBusRouteResponse struct {
 	BusRoutes []BusRoute `json:"value"`
 }
 
-func GetAllBusService(client *APIClient) (AllBusServiceResponse, error) {
+type BusStop struct {
+	BusStopCode string  `json:"BusStopCode"`
+	RoadName    string  `json:"RoadName"`
+	Description string  `json:"Description"`
+	Latitude    float32 `json:"Latitude"`
+	Longitude   float32 `json:"Longitude"`
+}
+
+type AllBusStopResponse struct {
+	Metadata string    `json:"odata.metadata"`
+	BusStops []BusStop `json:"value"`
+}
+
+func GetAllBusServices(client *APIClient) (AllBusServiceResponse, error) {
 	req, err := http.NewRequest("GET", client.baseURL+"BusServices", nil)
 	if err != nil {
 		return AllBusServiceResponse{}, errors.New("error creating the request")
@@ -67,7 +80,7 @@ func GetAllBusService(client *APIClient) (AllBusServiceResponse, error) {
 	return result, nil
 }
 
-func GetAllBusRoute(client *APIClient) (AllBusRouteResponse, error) {
+func GetAllBusRoutes(client *APIClient) (AllBusRouteResponse, error) {
 	req, err := http.NewRequest("GET", client.baseURL+"BusRoutes", nil)
 	if err != nil {
 		return AllBusRouteResponse{}, errors.New("error creating the request")
@@ -84,6 +97,28 @@ func GetAllBusRoute(client *APIClient) (AllBusRouteResponse, error) {
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
 		return AllBusRouteResponse{}, err
+	}
+
+	return result, nil
+}
+
+func GetAllBusStops(client *APIClient) (AllBusStopResponse, error) {
+	req, err := http.NewRequest("GET", client.baseURL+"BusStops", nil)
+	if err != nil {
+		return AllBusStopResponse{}, errors.New("error creating the request")
+	}
+	req.Header.Add("AccountKey", client.accountKey)
+
+	resp, err := client.httpClient.Do(req)
+	if err != nil {
+		return AllBusStopResponse{}, err
+	}
+	defer resp.Body.Close()
+
+	var result AllBusStopResponse
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return AllBusStopResponse{}, err
 	}
 
 	return result, nil
