@@ -121,6 +121,7 @@ func GetBusServicesPaginated(apiClient *APIClient, skip int) (AllBusServiceRespo
 	return result, nil
 
 }
+
 func GetAllBusRoutes(apiClient *APIClient) (AllBusRouteResponse, error) {
 	var result AllBusRouteResponse
 	if err := apiClient.getJSON("BusRoutes", &result); err != nil {
@@ -128,6 +129,22 @@ func GetAllBusRoutes(apiClient *APIClient) (AllBusRouteResponse, error) {
 	}
 
 	return result, nil
+}
+
+func GetBusRoutesPaginated(apiClient *APIClient, skip int) (AllBusRouteResponse, error) {
+	var result AllBusRouteResponse
+	endpoint := "BusServices?$skip=" + strconv.Itoa(skip)
+
+	if err := apiClient.getJSON(endpoint, &result); err != nil {
+		return AllBusRouteResponse{}, err
+	}
+
+	if len(result.BusRoutes) == 0 {
+		return AllBusRouteResponse{}, errors.New("no bus services available")
+	}
+
+	return result, nil
+
 }
 
 func GetAllBusStops(apiClient *APIClient) (AllBusStopResponse, error) {

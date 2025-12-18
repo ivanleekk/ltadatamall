@@ -13,7 +13,7 @@ func TestGetAllBusServices(t *testing.T) {
 	}
 }
 
-func TestGetBusServices(t *testing.T) {
+func TestGetBusServicesPaginated(t *testing.T) {
 	response, err := GetBusServicesPaginated(testClient, 500)
 	if err != nil {
 		t.Fatalf("Error calling GetBusServicesPaginated: %v", err)
@@ -23,7 +23,7 @@ func TestGetBusServices(t *testing.T) {
 	}
 }
 
-func TestGetBusServices_NoMoreData(t *testing.T) {
+func TestGetBusServicesPaginated_NoMoreData(t *testing.T) {
 	_, err := GetBusServicesPaginated(testClient, 1000000)
 	if err == nil {
 		t.Fatalf("Expected error when no more bus services are available")
@@ -37,8 +37,25 @@ func TestGetAllBusRoutes(t *testing.T) {
 		t.Fatalf("Error calling GetAllBusRoute: %v", err)
 	}
 
+	if len(response.BusRoutes) <= 100 {
+		t.Errorf("Expected more than 100 BusRoutes in response")
+	}
+}
+
+func TestGetBusRoutesPaginated(t *testing.T) {
+	response, err := GetBusRoutesPaginated(testClient, 500)
+	if err != nil {
+		t.Fatalf("Error calling GetBusServicesPaginated: %v", err)
+	}
 	if len(response.BusRoutes) == 0 {
-		t.Errorf("Expected non-empty BusRoutes in response")
+		t.Errorf("Expected non-empty BusServices in response")
+	}
+}
+
+func TestGetBusRoutesPaginated_NoMoreData(t *testing.T) {
+	_, err := GetBusRoutesPaginated(testClient, 1000000)
+	if err == nil {
+		t.Fatalf("Expected error when no more bus services are available")
 	}
 }
 
