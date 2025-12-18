@@ -1,5 +1,10 @@
 package ltadatamall
 
+import (
+	"errors"
+	"strconv"
+)
+
 type BusService struct {
 	ServiceNo       string `json:"ServiceNo"`
 	Operator        string `json:"Operator"`
@@ -80,14 +85,42 @@ type BusArrivalResponse struct {
 }
 
 func GetAllBusServices(apiClient *APIClient) (AllBusServiceResponse, error) {
-	var result AllBusServiceResponse
-	if err := apiClient.getJSON("BusServices", &result); err != nil {
-		return AllBusServiceResponse{}, err
+	var busServices []BusService
+	// Keep fetching until all records are retrieved
+	errorCount := 0
+	pagination := 0
+	var res AllBusServiceResponse
+	for errorCount < 1 {
+		res, err := GetBusServicesPaginated(apiClient, len(busServices))
+		if err != nil {
+			errorCount++
+			break
+		}
+		pagination += 500
+		busServices = append(busServices, res.BusServices...)
 	}
-
+	result := AllBusServiceResponse{
+		BusServices: busServices,
+		Metadata:    res.Metadata,
+	}
 	return result, nil
 }
 
+func GetBusServicesPaginated(apiClient *APIClient, skip int) (AllBusServiceResponse, error) {
+	var result AllBusServiceResponse
+	endpoint := "BusServices?$skip=" + strconv.Itoa(skip)
+
+	if err := apiClient.getJSON(endpoint, &result); err != nil {
+		return AllBusServiceResponse{}, err
+	}
+
+	if len(result.BusServices) == 0 {
+		return AllBusServiceResponse{}, errors.New("no bus services available")
+	}
+
+	return result, nil
+
+}
 func GetAllBusRoutes(apiClient *APIClient) (AllBusRouteResponse, error) {
 	var result AllBusRouteResponse
 	if err := apiClient.getJSON("BusRoutes", &result); err != nil {

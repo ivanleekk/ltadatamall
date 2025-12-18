@@ -8,8 +8,25 @@ func TestGetAllBusServices(t *testing.T) {
 		t.Fatalf("Error calling GetAllBusService: %v", err)
 	}
 
+	if len(response.BusServices) <= 500 {
+		t.Errorf("Expected more than 500 BusServices in response")
+	}
+}
+
+func TestGetBusServices(t *testing.T) {
+	response, err := GetBusServicesPaginated(testClient, 500)
+	if err != nil {
+		t.Fatalf("Error calling GetBusServicesPaginated: %v", err)
+	}
 	if len(response.BusServices) == 0 {
 		t.Errorf("Expected non-empty BusServices in response")
+	}
+}
+
+func TestGetBusServices_NoMoreData(t *testing.T) {
+	_, err := GetBusServicesPaginated(testClient, 1000000)
+	if err == nil {
+		t.Fatalf("Expected error when no more bus services are available")
 	}
 }
 
