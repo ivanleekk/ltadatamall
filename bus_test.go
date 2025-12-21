@@ -1,7 +1,6 @@
 package ltadatamall
 
 import (
-	"log"
 	"testing"
 )
 
@@ -81,6 +80,13 @@ func TestGetBusStopsPaginated(t *testing.T) {
 	}
 	if len(response.BusStops) == 0 {
 		t.Errorf("Expected non-empty BusStops in response")
+	}
+}
+
+func TestGetBusStopsPaginated_NoMoreData(t *testing.T) {
+	_, err := GetBusStopsPaginated(testClient, 1000000)
+	if err == nil {
+		t.Fatalf("Expected error when no more bus stops are available")
 	}
 }
 

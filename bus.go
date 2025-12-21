@@ -91,7 +91,7 @@ func GetAllBusServices(apiClient *APIClient) (AllBusServiceResponse, error) {
 	pagination := 0
 	var res AllBusServiceResponse
 	for errorCount < 1 {
-		res, err := GetBusServicesPaginated(apiClient, len(busServices))
+		res, err := GetBusServicesPaginated(apiClient, pagination)
 		if err != nil {
 			errorCount++
 			break
