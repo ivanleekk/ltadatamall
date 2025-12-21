@@ -1,6 +1,9 @@
 package ltadatamall
 
-import "testing"
+import (
+	"log"
+	"testing"
+)
 
 func TestGetAllBusServices(t *testing.T) {
 	response, err := GetAllBusServices(testClient)
@@ -63,9 +66,19 @@ func TestGetAllBusStops(t *testing.T) {
 	response, err := GetAllBusStops(testClient)
 
 	if err != nil {
-		t.Fatalf("Error calling GetAllBusStops: %v", err)
+		t.Fatalf("Error calling GetAllBusRoute: %v", err)
 	}
 
+	if len(response.BusStops) <= 500 {
+		t.Errorf("Expected more than 500 BusStops in response")
+	}
+}
+
+func TestGetBusStopsPaginated(t *testing.T) {
+	response, err := GetBusStopsPaginated(testClient, 500)
+	if err != nil {
+		t.Fatalf("Error calling GetBusStopsPaginated: %v", err)
+	}
 	if len(response.BusStops) == 0 {
 		t.Errorf("Expected non-empty BusStops in response")
 	}

@@ -148,9 +148,37 @@ func GetBusRoutesPaginated(apiClient *APIClient, skip int) (AllBusRouteResponse,
 }
 
 func GetAllBusStops(apiClient *APIClient) (AllBusStopResponse, error) {
+	var busStops []BusStop
+	// Keep fetching until all records are retrieved
+	errorCount := 0
+	pagination := 0
+	var res AllBusStopResponse
+	for errorCount < 1 {
+		res, err := GetBusStopsPaginated(apiClient, pagination)
+		if err != nil {
+			errorCount++
+			break
+		}
+		pagination += 500
+		busStops = append(busStops, res.BusStops...)
+	}
+	result := AllBusStopResponse{
+		BusStops: busStops,
+		Metadata: res.Metadata,
+	}
+	return result, nil
+}
+
+func GetBusStopsPaginated(apiClient *APIClient, skip int) (AllBusStopResponse, error) {
 	var result AllBusStopResponse
-	if err := apiClient.getJSON("BusStops", &result); err != nil {
+	endpoint := "BusStops?$skip=" + strconv.Itoa(skip)
+
+	if err := apiClient.getJSON(endpoint, &result); err != nil {
 		return AllBusStopResponse{}, err
+	}
+
+	if len(result.BusStops) == 0 {
+		return AllBusStopResponse{}, errors.New("no bus stops available")
 	}
 
 	return result, nil
