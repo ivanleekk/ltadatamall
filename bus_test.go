@@ -45,7 +45,7 @@ func TestGetAllBusRoutes(t *testing.T) {
 }
 
 func TestGetBusRoutesPaginated(t *testing.T) {
-	response, err := GetBusRoutesPaginated(testClient, 500)
+	response, err := GetBusRoutesPaginated(testClient, 5000)
 	if err != nil {
 		t.Fatalf("Error calling GetBusServicesPaginated: %v", err)
 	}
