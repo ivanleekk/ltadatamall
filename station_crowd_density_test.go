@@ -1,7 +1,6 @@
 package ltadatamall
 
 import (
-	"log"
 	"testing"
 )
 
@@ -10,7 +9,7 @@ func TestGetAllStationCrowdDensityRealTime(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error calling GetAllStationCrowdDensityRealTime: %v", err)
 	}
-	log.Default().Println("AllStationCrowdDensityRealTime", response)
+
 	if len(response.Lines) != 11 {
 		t.Errorf("Expected Exactly 11 Lines of RealTime Station Crowd Density in response")
 	}
@@ -32,7 +31,7 @@ func TestGetAllStationCrowdDensityForecast(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error calling GetAllStationCrowdDensityForecast: %v", err)
 	}
-	log.Default().Println("GetAllStationCrowdDensityForecast", response)
+
 	if len(response.Lines) != 11 {
 		t.Errorf("Expected Exactly 11 Lines of Forecast Station Crowd Density in response")
 	}
