@@ -1,3 +1,5 @@
+// ltadatamall package provides a wrapper around Singapore's LTA Datamall APIs
+// allowing for easier usage in your own projects with your own API Key
 package ltadatamall
 
 import (
