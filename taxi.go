@@ -64,30 +64,8 @@ func GetTaxiAvailabilityPaginated(apiClient *APIClient, skip int) (TaxiAvailabil
 }
 
 func GetAllTaxiStands(apiClient *APIClient) (TaxiStandResponse, error) {
-	var taxiStands []TaxiStand
-	// Keep fetching until all records are retrieved
-	errorCount := 0
-	pagination := 0
-	var res TaxiStandResponse
-	for errorCount < 1 {
-		res, err := GetTaxiStandsPaginated(apiClient, pagination)
-		if err != nil {
-			errorCount++
-			break
-		}
-		pagination += 500
-		taxiStands = append(taxiStands, res.TaxiStands...)
-	}
-	result := TaxiStandResponse{
-		TaxiStands: taxiStands,
-		Metadata:   res.Metadata,
-	}
-	return result, nil
-}
-
-func GetTaxiStandsPaginated(apiClient *APIClient, skip int) (TaxiStandResponse, error) {
 	var result TaxiStandResponse
-	endpoint := "TaxiStands?$skip=" + fmt.Sprint(skip)
+	endpoint := "TaxiStands"
 	if err := apiClient.getJSON(endpoint, &result); err != nil {
 		return TaxiStandResponse{}, err
 	}
