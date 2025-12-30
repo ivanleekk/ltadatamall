@@ -84,8 +84,23 @@ type GeospatialLink struct {
 	Link string `json:"Link"`
 }
 type RawGeospatialLayerResponse struct {
-	Metadata string           `json:"odata.metadata"`
+	Metadata string `json:"odata.metadata"`
+	Type     string
 	Value    []GeospatialLink `json:"value"`
+}
+
+type GeospatialLayerResult struct {
+	LayerType geospatialLayerType
+	Name      string
+	Response  RawGeospatialLayerResponse
+	Error     error
+}
+
+type MultipleGeospatialLayerResponse struct {
+	Layers       []GeospatialLayerResult
+	SuccessCount int
+	FailureCount int
+	TotalCount   int
 }
 
 // Function to call the raw api and just return the output without modification
@@ -99,6 +114,36 @@ func GetGeospatialLayer(apiClient *APIClient, layerType geospatialLayerType) (Ra
 	if len(result.Value) == 0 {
 		return RawGeospatialLayerResponse{}, errors.New("no geospatial layer at available")
 	}
-
+	result.Type = geospatialEndpoint[layerType]
 	return result, nil
+}
+
+func GetAllGeospatialLayers(apiClient *APIClient) MultipleGeospatialLayerResponse {
+	var layers []GeospatialLayerResult
+	successCount := 0
+	failureCount := 0
+
+	for layerType, name := range geospatialEndpoint {
+		result, err := GetGeospatialLayer(apiClient, layerType)
+		layerResult := GeospatialLayerResult{
+			LayerType: layerType,
+			Name:      name,
+			Response:  result,
+			Error:     err,
+		}
+		layers = append(layers, layerResult)
+
+		if err != nil {
+			failureCount++
+		} else {
+			successCount++
+		}
+	}
+
+	return MultipleGeospatialLayerResponse{
+		Layers:       layers,
+		SuccessCount: successCount,
+		FailureCount: failureCount,
+		TotalCount:   len(geospatialEndpoint),
+	}
 }
