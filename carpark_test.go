@@ -31,3 +31,14 @@ func TestGetCarparkAvailabilityPaginated_NoMoreData(t *testing.T) {
 		t.Fatalf("Expected error when no more carparks are available")
 	}
 }
+
+func TestGetEVChargersByPostalCode(t *testing.T) {
+	response, err := GetEVChargersByPostalCode(testClient, 440005)
+	if err != nil {
+		t.Fatalf("Error calling GetEVChargersByPostalCode: %v", err)
+	}
+
+	if len(response.Value.EVChargerLocationData) == 0 {
+		t.Errorf("Expected non-empty EVChargers in response")
+	}
+}
