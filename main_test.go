@@ -4,11 +4,14 @@ import (
 	"log"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/joho/godotenv"
 )
 
 var testClient *APIClient
+var currentYear int
+var currentMonth time.Month
 
 func TestMain(m *testing.M) {
 	setup()
@@ -33,6 +36,12 @@ func setup() {
 	baseUrl := os.Getenv("LTA_DATAMALL_BASE_URL")
 	if baseUrl == "" {
 		log.Fatal("LTA_DATAMALL_BASE_URL not set in environment")
+	}
+
+	currentYear, currentMonth, _ = time.Now().Date()
+	if currentMonth <= 2 {
+		currentYear = currentYear - 1
+		currentMonth = 11 - 1 + currentMonth
 	}
 
 	testClient = NewClient(baseUrl, apiKey)
