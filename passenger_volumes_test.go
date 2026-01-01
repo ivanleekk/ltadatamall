@@ -2,7 +2,6 @@ package ltadatamall
 
 import (
 	"testing"
-	"time"
 )
 
 func TestFormatYearMonth(t *testing.T) {
@@ -26,7 +25,7 @@ func TestFormatYearMonth(t *testing.T) {
 }
 
 func TestGetBusStopsPassengerVolumes(t *testing.T) {
-	result, err := GetBusStopsPassengerVolumes(testClient, time.Now().Year(), int(time.Now().Month())-1)
+	result, err := GetBusStopsPassengerVolumes(testClient, currentYear, int(currentMonth))
 	if err != nil {
 		t.Errorf("GetBusStopsPassengerVolumes returned an error: %v", err)
 	}
@@ -36,7 +35,7 @@ func TestGetBusStopsPassengerVolumes(t *testing.T) {
 }
 
 func TestGetOriginDestinationBusStopsPassengerVolumes(t *testing.T) {
-	result, err := GetOriginDestinationBusStopsPassengerVolumes(testClient, time.Now().Year(), int(time.Now().Month())-1)
+	result, err := GetOriginDestinationBusStopsPassengerVolumes(testClient, currentYear, int(currentMonth))
 	if err != nil {
 		t.Errorf("GetOriginDestinationBusStopsPassengerVolumes returned an error: %v", err)
 	}
@@ -46,7 +45,7 @@ func TestGetOriginDestinationBusStopsPassengerVolumes(t *testing.T) {
 }
 
 func TestGetTrainStationsPassengerVolumes(t *testing.T) {
-	result, err := GetTrainStationsPassengerVolumes(testClient, time.Now().Year(), int(time.Now().Month())-1)
+	result, err := GetTrainStationsPassengerVolumes(testClient, currentYear, int(currentMonth))
 	if err != nil {
 		t.Errorf("GetTrainStationsPassengerVolumes returned an error: %v", err)
 	}
@@ -56,7 +55,7 @@ func TestGetTrainStationsPassengerVolumes(t *testing.T) {
 }
 
 func TestGetOriginDestinationTrainStationsPassengerVolumes(t *testing.T) {
-	result, err := GetOriginDestinationTrainStationsPassengerVolumes(testClient, time.Now().Year(), int(time.Now().Month())-1)
+	result, err := GetOriginDestinationTrainStationsPassengerVolumes(testClient, currentYear, int(currentMonth))
 	if err != nil {
 		t.Errorf("GetOriginDestinationTrainStationsPassengerVolumes returned an error: %v", err)
 	}
