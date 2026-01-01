@@ -9,7 +9,7 @@ func TestGetAllTrafficImages(t *testing.T) {
 	if err != nil {
 		t.Errorf("GetAllTrafficImages returned an error: %v", err)
 	}
-	if len(result.Value) == 0 {
+	if len(result.TrafficImages) == 0 {
 		t.Errorf("GetAllTrafficImages returned no data, expected at least one traffic image")
 	}
 }

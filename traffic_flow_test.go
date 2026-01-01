@@ -9,7 +9,7 @@ func TestGetTrafficFlow(t *testing.T) {
 	if err != nil {
 		t.Errorf("GetTrafficFlow returned an error: %v", err)
 	}
-	if len(result.Value) == 0 {
+	if len(result.TrafficFlow) == 0 {
 		t.Errorf("GetTrafficFlow returned empty value")
 	}
 }

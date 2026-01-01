@@ -1,8 +1,8 @@
 package ltadatamall
 
 type AllTrafficFlowResponse struct {
-	Metadata string           `json:"odata.metadata"`
-	Value    []TrafficFlowObj `json:"value"`
+	Metadata    string           `json:"odata.metadata"`
+	TrafficFlow []TrafficFlowObj `json:"value"`
 }
 
 type TrafficFlowObj struct {
@@ -16,7 +16,7 @@ func GetTrafficFlow(apiClient *APIClient) (AllTrafficFlowResponse, error) {
 		return AllTrafficFlowResponse{}, err
 	}
 
-	if len(result.Value) == 0 {
+	if len(result.TrafficFlow) == 0 {
 		return AllTrafficFlowResponse{}, nil
 	}
 
