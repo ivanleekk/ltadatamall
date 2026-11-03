@@ -216,3 +216,37 @@ func GetBusArrivalAtBusStopAndService(apiClient *APIClient, busStopCode, service
 
 	return result, nil
 }
+
+// GetBusServiceByServiceNo returns the service information for a single bus
+// service, using the optional ServiceNo request parameter of the Bus Services API.
+func GetBusServiceByServiceNo(apiClient *APIClient, serviceNo string) (AllBusServiceResponse, error) {
+	var result AllBusServiceResponse
+	endpoint := "BusServices?ServiceNo=" + serviceNo
+
+	if err := apiClient.getJSON(endpoint, &result); err != nil {
+		return AllBusServiceResponse{}, err
+	}
+
+	if len(result.BusServices) == 0 {
+		return AllBusServiceResponse{}, errors.New("no bus services available")
+	}
+
+	return result, nil
+}
+
+// GetBusStopByBusStopCode returns the details of a single bus stop, using the
+// optional BusStopCode request parameter of the Bus Stops API.
+func GetBusStopByBusStopCode(apiClient *APIClient, busStopCode string) (AllBusStopResponse, error) {
+	var result AllBusStopResponse
+	endpoint := "BusStops?BusStopCode=" + busStopCode
+
+	if err := apiClient.getJSON(endpoint, &result); err != nil {
+		return AllBusStopResponse{}, err
+	}
+
+	if len(result.BusStops) == 0 {
+		return AllBusStopResponse{}, errors.New("no bus stops available")
+	}
+
+	return result, nil
+}

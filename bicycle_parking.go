@@ -8,17 +8,19 @@ type AllBicycleParkingResponse struct {
 }
 
 type BicycleParking struct {
-	Description      string  `json:"Description"`
-	Latitude         float64 `json:"Latitude"`
-	Longitude        float64 `json:"Longitude"`
-	RackType         string  `json:"RackType"`
-	RackCount        int     `json:"RackCount"`
-	ShelterIndicator string  `json:"ShelterIndicator"`
+	Description          string  `json:"Description"`
+	Latitude             float64 `json:"Latitude"`
+	Longitude            float64 `json:"Longitude"`
+	RackType             string  `json:"RackType"`
+	RackCount            int     `json:"RackCount"`
+	ShelterIndicator     string  `json:"ShelterIndicator"`
+	SharedBicycleParking string  `json:"SharedBicycleParking"`
+	Type                 string  `json:"Type"`
 }
 
 func GetBicycleParking(apiClient *APIClient, latitude float64, longitude float64, distance float64) (AllBicycleParkingResponse, error) {
 	var result AllBicycleParkingResponse
-	endpoint := "BicycleParkingv2?Lat=" + strconv.FormatFloat(latitude, 'f', 6, 64) +
+	endpoint := "v3/BicycleParking?Lat=" + strconv.FormatFloat(latitude, 'f', 6, 64) +
 		"&Long=" + strconv.FormatFloat(longitude, 'f', 6, 64) +
 		"&Dist=" + strconv.FormatFloat(distance, 'f', 4, 64)
 	if err := apiClient.getJSON(endpoint, &result); err != nil {

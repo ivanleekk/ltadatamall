@@ -114,3 +114,25 @@ func GetEVChargersByPostalCode(apiClient *APIClient, postalCode int) (AllEVCharg
 
 	return result, nil
 }
+
+type AllEVChargerBatchResponse struct {
+	Metadata string         `json:"odata.metadata"`
+	Value    []DownloadLink `json:"value"`
+}
+
+// GetEVChargersBatch returns the download link for a single file containing all
+// electric vehicle charging points in Singapore and their availabilities. The
+// link expires after 15 minutes.
+func GetEVChargersBatch(apiClient *APIClient) (AllEVChargerBatchResponse, error) {
+	var result AllEVChargerBatchResponse
+	endpoint := "EVCBatch"
+	if err := apiClient.getJSON(endpoint, &result); err != nil {
+		return AllEVChargerBatchResponse{}, err
+	}
+
+	if len(result.Value) == 0 {
+		return AllEVChargerBatchResponse{}, errors.New("no EV charging points batch file available")
+	}
+
+	return result, nil
+}

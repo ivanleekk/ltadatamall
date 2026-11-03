@@ -42,3 +42,13 @@ func TestGetEVChargersByPostalCode(t *testing.T) {
 		t.Errorf("Expected non-empty EVChargers in response")
 	}
 }
+
+func TestGetEVChargersBatch(t *testing.T) {
+	response, err := GetEVChargersBatch(testClient)
+	if err != nil {
+		t.Fatalf("Error calling GetEVChargersBatch: %v", err)
+	}
+	if len(response.Value) == 0 {
+		t.Errorf("Expected a download link in GetEVChargersBatch response")
+	}
+}
